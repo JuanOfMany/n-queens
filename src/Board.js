@@ -78,13 +78,39 @@
     // --------------------------------------------------------------
     //
     // test if a specific row on this board contains a conflict
+
+    //Specification
+    // I: row index
+    // O: boolean, whether there is conflict or not
+    // C: use given functions
+    // E: if not given an input it should return false
+    // J: to check if there are two pieces on row
+    // E: this function iterates over a row array and if we have more
+    // than one pieces on a row.
+    // A: //pseudocode, look in func
+
+
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var count = 0;
+      var row = this.get(rowIndex);
+      var rowLength = row.length;
+      for (position of row) {
+        if (position === 1 ) {
+          count++ }
+        if (count > 1) {
+          return true;
+        }
+      }
+      return false;
     },
 
-    // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      for (var i = 0; i < this.rows().length; i++) {
+        if (this.hasRowConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -93,7 +119,33 @@
     // --------------------------------------------------------------
     //
     // test if a specific column on this board contains a conflict
+
+// I: num representing column we are checking
+// O: boolean, true if conflict in column, else false
+// C: use given funcs
+// E: if we really mess with the input?
+
+//Explanation: go through each value in a column
+// if there are multiple non-zero values
+// then we have a conflict
+
     hasColConflictAt: function(colIndex) {
+      //make a counter var
+      var count = 0;
+      //create for loop from 0 to n (row/column length)
+      for (var i = 0; i < this.get(0).length; i++) {
+        //if value at current index is 1
+        if (this.get(i)[colIndex]) {
+          //counter ++
+          count++;
+        }
+        //if counter > 1
+        if (count > 1) {
+          //we have conflict, return true
+          return true;
+        }
+      }
+      //outside of for loop
       return false; // fixme
     },
 
