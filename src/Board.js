@@ -151,7 +151,12 @@
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      for (var i = 0; i < this.rows().length; i++) {
+        if (this.hasColConflictAt(i)) {
+          return true;
+        }
+      }
+      return false;
     },
 
 
@@ -160,13 +165,54 @@
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
+
+    //I: return value from findMajorDiagonalColumnIndexAtFirstRow (with position inputs)
+    //O: boolean, if true has a conflict on majorDiagonal
+    //C: same as before
+    //E: none yet, lets find some
+
+    //Justification: run this function to find conflicts on a major diagonal
+    //Explanation: The function should evaluate to diagonal indices based on a start location
+    //major diagonal colum index at first row is starting point
+    //starting from there we check major diagonal values from it
+    //if there is more than 1 non-zero value on major diagonal
+    //return true, else return false
+
+
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      //declare a counter var
+      var count = 0;
+      //create a for loop that goes from i to N
+      for (var i = 0; i < this.get(0).length; i++) {
+        //value is this.get(i)[input]
+        //if value we're checking is === 1
+        if (this.get(i)[majorDiagonalColumnIndexAtFirstRow]) {
+          //increase counter and inputVar
+          count++
+        }
+        majorDiagonalColumnIndexAtFirstRow++
+        //if counter > 1
+        if (count > 1) {
+          //we found conflict, return true
+          return true;
+        }
+      }
+      //outside of for loop
+      return false;
     },
 
     // test if any major diagonals on this board contain conflicts
+    //Explanation: We are running majorDiagonalConflictAt
+    //For every major diagonal (including ones that start at negative indexes)
+    //if any invocations return true; return true
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      //iterate from (-1 * rows.length) to rows.length
+      for (var i = (this.get(0).length * -1); i < this.get(0).length; i++) {
+        //if hasMajorDiagonalConflict is true
+        if (this.hasMajorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }  return false;
     },
 
 
