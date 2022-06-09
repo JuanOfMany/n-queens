@@ -221,12 +221,54 @@
     // --------------------------------------------------------------
     //
     // test if a specific minor diagonal on this board contains a conflict
+
+    // I: result from minor Diagonal Column index, just a value
+    // O: boolean, true with conflict, false no conflict
+    // C: backbone functions, same as always
+    // E: not really
+
+    // Exp: Takes a column index at the first row,
+    //checks the minor diagonal for conflicts:
+    //by iterating through the rows and moving the column value (left/descending values)
+
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      // declare a counter
+      var counter = 0;
+      // create a for loop, from i = 0, to i < this.get(0).length
+      for (var i = 0; i < this.get(0).length; i++) {
+        // if this.get(i)[minorDiagonalColumnIndexAtFirstRow]
+        if (this.get(i)[minorDiagonalColumnIndexAtFirstRow]) {
+          // counter++;
+          counter++;
+        }
+        // minorDiagnol--;
+        minorDiagonalColumnIndexAtFirstRow--;
+        // if counter > 1
+        if (counter > 1) {
+          return true;
+        }
+        // end of loop
+      }
       return false; // fixme
     },
 
+    // I: no input
+    // O: boolean, true if conflict, false otherwise
+    // C: same
+    // E: none
+
+    // Explanation: When function is ran should iterate over every minor diagonal:
+    // Each minor diagnol is checked for conflict
+    // Needs to extend pass matrix row length
+    // Will have to iterate from 0 to 6, 0 to 2 * row.length()
+
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      for (var i = 0; i < 2 * this.rows().length; i++) {
+        if (this.hasMinorDiagonalConflictAt(i)) {
+          return true;
+        }
+      }
       return false; // fixme
     }
 
