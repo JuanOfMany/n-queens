@@ -33,7 +33,7 @@ window.findNRooksSolution = function(n) {
       }
     }
   }
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+  // console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
   return solution.rows();
 };
 
@@ -65,43 +65,98 @@ window.countNRooksSolutions = function(n) {
   var solutionStorage = [];
   var emptyBoard = new Board({n: n});
 
-//declare variable to hold count of pieces
-
-//declare inner recursive function
-var innerFunction = function (board) {
-  var numPieces = _.reduce(board.rows(), function(memo, row) {
-    return memo + _.reduce(row, function(memo, col) {
-      return memo + col;
-    }, 0);
+declare variable to hold count of pieces
+var numPieces = function (board) {
+  return _.reduce(board.rows(), function(memo, row) {
+  return memo + _.reduce(row, function(memo, col) {
+    return memo + col;
   }, 0);
-//if we have n pieces on board
-  if (numPieces === n){
+}, 0);
+}
+
+
+// \/\/\/\/\/\/\/\/\/ OLD CODE THAT DOES NOT WORK RIGHT \/\/\/\/\/\/\/
+declare inner recursive function
+var innerFunction = function (board) {
+var sum = 0;
+for (var i = 0; i < board.rows().length; i++) {
+  var row = board.get(i);
+  sum += row.reduce((previousValue, currentValue) => previousValue + currentValue);
+}
+
+//if we have n pieces on boards
+console.log(board.rows())
+  if (sum === n){
   //push the solution to solutionStorage
-    solutionStorage.push(board);
+    solutionStorage.push(board.rows());
       //return
       return;
   }
+
+KEEPS ON LOOPING
   //loop over rows of matrix
-  for (var i = 0; i < board.rows().length; i++) {}
+  for (var i = 0; i < n; i++) {
     //loop over columns in rows of matrix
-
-      //at current position, toggle rook
-
-      //if anyRookConflict logic (not directly function) returns true
-
+    for (var j = 0; j < n; j++) {
+      //at current position, toggle rook IF THERE IS NO PIECE THERE
+      if (board.get(i)[j] === 0){
+        board.togglePiece(i, j);
+      }
+      //if anyRookConflict logic returns true
+      if (board.hasAnyRooksConflicts()) {
         //untoggle rook at current position
-
+        board.togglePiece(i, j);
+      }
       //call innerRecursiveFunction on current board state
-
-//declare an empty matrix
-}
-//run the inner recursive function with a blank matrix passed in
+      innerFunction(board);
+    }}
+  }
+// declare an empty matrix
+// run the inner recursive function with a blank matrix passed in
 innerFunction(emptyBoard)
+// ^^^^^^^^^^^OLD CODE THAT DOES NOT WORK RIGHT^^^^^^^^^^^^^^^
 
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionStorage.length);
-  return solutionStorage.length;
+
+so we do need an inner recursive function
+
+where we pass in the x,y coordinates starting at 0,0
+and increment x every new execution context
+incrementing y is done with a for loop in the recursive function
+at each x,y toggle + check for conflict
+if you hit n pieces on board
+push solution to solutionStorage
+
+console.log('Number of solutions for ' + n + ' rooks:', juanSolutions.length);
+return solutionStorage.length;
+
+//   \/\/\/\/\/\/ JUAN TRYING TO IMPLEMENT THE SOLUTION AFTER HOURS \/\/\/\/\
+
+// var board = new Board({ n : n })
+// var juanCounter = 0
+// var juanRecursive = function (x) {
+// if (x === n) {
+//   juanCounter++
+//   return;
+// }
+
+// for (var i = 0; i < n; i++){
+//   board.togglePiece(x, i)
+//   if (!board.hasAnyRooksConflicts()) {
+//     juanRecursive(x + 1)
+//   }
+//   board.togglePiece(x, i)
+//   }
+// }
+// juanRecursive(0)
+// return juanCounter
+
 };
+
+
+
+
+
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
